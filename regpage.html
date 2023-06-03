@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bootstrap</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  <style>
+    .heading {
+      text-align: center;
+      color: orange;
+    }
+    
+    .border{
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container container-responsive border border-warning p-4">
+    <h1 class="heading">Book a call</h1>
+    <p class="text-center">Book a call slot and our representative will call you within an hour of the selected time</p>
+    <hr>
+    <form action="#" onsubmit="afterclick()" id="myForm">
+      <label for="name" class="form-label">Name:</label>
+      <input type="text" id="name" class="form-control" placeholder="Enter your name">
+      <label for="mail" class="form-label mt-2">Email:</label>
+      <input type="email" id="mail" class="form-control" placeholder="Enter your mail ID">
+      <label for="phno" class="form-label mt-2">Phone No:</label>
+      <input type="text" id="phno" class="form-control" placeholder="Enter your phone number">
+      <div class="row">
+        <div class="col">
+          <label class="form-label mt-2" for="date">Date:</label>
+          <input class="form-control" id="date" name="date" placeholder="MM/DD/YYYY" type="text"/>
+        </div>
+        <div class="col">
+          <label class="form-label mt-2" for="time">Time:</label>
+          <input class="form-control" id="time" name="time" placeholder="00:00" type="time"/>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-outline-warning mt-4 text-center">GET A CALL</button>
+    </form>
+  </div>
+  <script>
+    const form = document.getElementById('myForm');
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const mail = document.getElementById('mail').valuê.trim();
+      const phno = document.getElementById('phno').value;
+      const date = document.getElementById('date').value;
+      const time = document.getElementById('time').value;
+      if (name != '' || mail != ''||phno != ''||date != ''||time != '') {
+        console.log('you will get a call');
+      } else {
+        console.log('Please enter a valid value.');
+      }
+      form.reset();
+    });
+  </script>
+</body>
+</html>
