@@ -30,12 +30,11 @@
    </div>
   </div>
   <script>
-    var secondItem = document.querySelectorAll("#items li")[1];
-    secondItem.style.color = "green";
-    var oddItems = document.querySelectorAll("#items li:nth-child(odd)");
-    for (var i = 0; i < oddItems.length; i++) {
-      oddItems[i].style.backgroundColor = "green";
-    }
+    let headerList = document.getElementById('header-title');
+    headerList.innerText = "Hello " + headerList.innerText;
+    let helloItem = document.getElementById('items');
+    helloItem.children[0].innerText = "Hello " + helloItem.children[0].innerText ; 
   </script>
+
 </body>
 </html>
