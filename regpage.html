@@ -48,11 +48,11 @@
     form.addEventListener('submit', function(event) {
       event.preventDefault();
       const name = document.getElementById('name').value.trim();
-      const mail = document.getElementById('mail').valuê.trim();
+      const mail = document.getElementById('mail').value.trim();
       const phno = document.getElementById('phno').value;
       const date = document.getElementById('date').value;
       const time = document.getElementById('time').value;
-      if (name != '' || mail != ''||phno != ''||date != ''||time != '') {
+      if (name != '' && mail != ''&&phno != ''&&date != ''&&time != '') {
         console.log('you will get a call');
       } else {
         console.log('Please enter a valid value.');
