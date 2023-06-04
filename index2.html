@@ -29,6 +29,13 @@
     </ul>
    </div>
   </div>
-
+  <script>
+    var secondItem = document.querySelectorAll("#items li")[1];
+    secondItem.style.color = "green";
+    var oddItems = document.querySelectorAll("#items li:nth-child(odd)");
+    for (var i = 0; i < oddItems.length; i++) {
+      oddItems[i].style.backgroundColor = "green";
+    }
+  </script>
 </body>
 </html>
