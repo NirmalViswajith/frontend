@@ -63,7 +63,17 @@
     }
     function saveOnScreen(userDetails) {
       const ulList = document.getElementById('newListItems');
-      ulList.innerHTML = ulList.innerHTML +`<li>${userDetails.Name} - ${userDetails.mail} - ${userDetails.phnum} - ${userDetails.date} - ${userDetails.time}</li>`;
+      const listItem = document.createElement('li');
+      listItem.textContent = `${userDetails.Name} - ${userDetails.mail} - ${userDetails.phnum} - ${userDetails.date} - ${userDetails.time}`;
+      
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.classList.add('btn', 'btn-outline-danger', 'ms-2');
+      deleteButton.addEventListener('click', function () {
+        ulList.removeChild(listItem);
+      });
+      listItem.appendChild(deleteButton);
+      ulList.appendChild(listItem);
     }
   </script>
 </body>
