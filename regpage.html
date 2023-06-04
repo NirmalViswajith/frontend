@@ -22,7 +22,7 @@
     <h1 class="heading">Book a call</h1>
     <p class="text-center">Book a call slot and our representative will call you within an hour of the selected time</p>
     <hr>
-    <form action="#" onsubmit="addWithoutRemov(event)" id="myForm">
+    <form onsubmit="addWithoutRemov(event)" id="myForm">
       <label for="name" class="form-label">Name:</label>
       <input type="text" id="name" name="userName" class="form-control" placeholder="Enter your name">
       <label for="mail" class="form-label mt-2">Email:</label>
@@ -48,7 +48,7 @@
       event.preventDefault();
       const Name = event.target.userName.value;
       const mail = event.target.mailId.value;
-      const phnum = event.target.phoneNumber.value;
+      const phnum = event.target.phno.value;
       const date = event.target.date.value;
       const time = event.target.time.value;
       const userDetails = {
@@ -73,6 +73,20 @@
         ulList.removeChild(listItem);
       });
       listItem.appendChild(deleteButton);
+      
+      const editButton = document.createElement('button');
+      editButton.textContent = 'Edit';
+      editButton.classList.add('btn', 'btn-outline-danger', 'ms-2');
+      editButton.addEventListener('click', function(e){
+        localStorage.removeItem('userDetails.eMail');
+        ulList.removeChild(listItem);
+        document.getElementById('name').value = userDetails.Name;
+        document.getElementById('mail').value = userDetails.mail;
+        document.getElementById('phno').value = userDetails.phnum;
+        document.getElementById('date').value = userDetails.date;
+        document.getElementById('time').value = userDetails.time;
+      });
+      listItem.appendChild(editButton);
       ulList.appendChild(listItem);
     }
   </script>
