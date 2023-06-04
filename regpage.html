@@ -52,26 +52,25 @@
       const date = document.getElementById('date').value;
       const time = document.getElementById('time').value;
       if (name != '' && mail != ''&&phno != ''&&date != ''&&time != '') {
-        localStorage.setItem("Name", name);
-        localStorage.setItem("E-Mail", mail);
-        localStorage.setItem("Phone Number", phno);
-        localStorage.setItem("Date", date);
-        localStorage.setItem("Time", time);
-        console.log(name);
-        console.log(mail);
-        console.log(phno);
-        console.log(date);
-        console.log(time);
+        const userDetails = {
+          'Name' : name,
+          'E-Mail' : mail,
+          'Phone Number' : phno,
+          'Date' : date,
+          'Time' : time
+        }
+        localStorage.setItem("UserDetails", JSON.stringify(userDetails));
+        console.log(userDetails)
       } else {
         console.log('Please enter a valid value.');
       }
       form.reset();
     });
-    console.log(localStorage.getItem("Name"));
-    console.log(localStorage.getItem("E-Mail"));
-    console.log(localStorage.getItem("Phone Number"));
-    console.log(localStorage.getItem("Date"));
-    console.log(localStorage.getItem("Time"));
+    const storedUserDetails = localStorage.getItem('UserDetails');
+    if (storedUserDetails) {
+      const userDetails = JSON.parse(storedUserDetails);
+      console.log(userDetails);
+    }
   </script>
 </body>
 </html>
