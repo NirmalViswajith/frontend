@@ -58,7 +58,8 @@
         date,
         time
       }
-      localStorage.setItem("userDetails.eMail", JSON.stringify(userDetails));
+      const key = `${userDetails.eMail}`;
+      localStorage.setItem(key, JSON.stringify(userDetails));
       saveOnScreen(userDetails);
     }
     function saveOnScreen(userDetails) {
