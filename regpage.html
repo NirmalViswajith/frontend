@@ -118,6 +118,19 @@
           .catch((err) => console.log(err));
         saveOnScreen(userDetails);
       }
+      window.addEventListener("DOMContentLoaded", () => {
+        axios
+          .get(
+            "https://crudcrud.com/api/396ae82cad20403780ee1026032e7609/appointment"
+          )
+          .then((res) => {
+            console.log(res);
+            for (var i = 0; i < res.data.length; i++) {
+              saveOnScreen(res.data[i]);
+            }
+          })
+          .catch(err => console.log(err));
+      });
       function saveOnScreen(userDetails) {
         const ulList = document.getElementById("newListItems");
         const listItem = document.createElement("li");
