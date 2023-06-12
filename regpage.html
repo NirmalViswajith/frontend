@@ -140,7 +140,12 @@
         deleteButton.textContent = "Delete";
         deleteButton.classList.add("btn", "btn-outline-danger", "ms-2");
         deleteButton.addEventListener("click", function () {
-          ulList.removeChild(listItem);
+           axios
+            .delete(
+              `https://crudcrud.com/api/396ae82cad20403780ee1026032e7609/appointment/${userDetails._id}`
+            )
+            .then((res) => ulList.removeChild(listItem))
+            .catch((err) => console.log(err));
         });
         listItem.appendChild(deleteButton);
 
