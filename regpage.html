@@ -104,45 +104,50 @@
           date,
           time,
         };
-        // const key = `${userDetails.eMail}`;
-        // localStorage.setItem(key, JSON.stringify(userDetails));
-        axios
-          .post(
-            "https://crudcrud.com/api/396ae82cad20403780ee1026032e7609/appointment",
-            userDetails
-          )
-          .then((res) => {
-            saveOnScreen(userDetails.data);
-            console.log(res);
-          })
-          .catch((err) => console.log(err));
-        saveOnScreen(userDetails);
+
+        const editMode = localStorage.getItem("userDetails.eMail");
+        if (editMode) {
+          const userId = JSON.parse(editMode)._id;
+          axios
+            .put(
+              `https://crudcrud.com/api/01b168edb7e64469bee20a9f2dd90fd6/appointment/${userId}`,
+              userDetails
+            )
+            .then((res) => {
+              updateOnScreen(userDetails, userId);
+              console.log(res);
+            })
+            .catch((err) => console.log(err));
+          localStorage.removeItem("userDetails.eMail");
+        } else {
+          axios
+            .post(
+              "https://crudcrud.com/api/01b168edb7e64469bee20a9f2dd90fd6/appointment",
+              userDetails
+            )
+            .then((res) => {
+              saveOnScreen(res.data);
+              console.log(res);
+            })
+            .catch((err) => console.log(err));
+        }
+
+        resetForm();
       }
-      window.addEventListener("DOMContentLoaded", () => {
-        axios
-          .get(
-            "https://crudcrud.com/api/396ae82cad20403780ee1026032e7609/appointment"
-          )
-          .then((res) => {
-            console.log(res);
-            for (var i = 0; i < res.data.length; i++) {
-              saveOnScreen(res.data[i]);
-            }
-          })
-          .catch(err => console.log(err));
-      });
+
       function saveOnScreen(userDetails) {
         const ulList = document.getElementById("newListItems");
         const listItem = document.createElement("li");
         listItem.textContent = `${userDetails.Name} - ${userDetails.mail} - ${userDetails.phnum} - ${userDetails.date} - ${userDetails.time}`;
+        listItem.setAttribute("data-id", userDetails._id);
 
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Delete";
         deleteButton.classList.add("btn", "btn-outline-danger", "ms-2");
         deleteButton.addEventListener("click", function () {
-           axios
+          axios
             .delete(
-              `https://crudcrud.com/api/396ae82cad20403780ee1026032e7609/appointment/${userDetails._id}`
+              `https://crudcrud.com/api/01b168edb7e64469bee20a9f2dd90fd6/appointment/${userDetails._id}`
             )
             .then((res) => ulList.removeChild(listItem))
             .catch((err) => console.log(err));
@@ -151,19 +156,52 @@
 
         const editButton = document.createElement("button");
         editButton.textContent = "Edit";
-        editButton.classList.add("btn", "btn-outline-danger", "ms-2");
-        editButton.addEventListener("click", function (e) {
-          localStorage.removeItem("userDetails.eMail");
-          ulList.removeChild(listItem);
-          document.getElementById("name").value = userDetails.Name;
-          document.getElementById("mail").value = userDetails.mail;
-          document.getElementById("phno").value = userDetails.phnum;
-          document.getElementById("date").value = userDetails.date;
-          document.getElementById("time").value = userDetails.time;
+        editButton.classList.add("btn", "btn-outline-primary", "ms-2");
+        editButton.addEventListener("click", function () {
+          populateForm(userDetails);
         });
         listItem.appendChild(editButton);
+        editButton.addEventListener("click", function () {
+          populateForm(userDetails);
+        });
+        listItem.appendChild(editButton);
+
         ulList.appendChild(listItem);
       }
+
+      function updateOnScreen(userDetails, userId) {
+        const ulList = document.getElementById("newListItems");
+        const listItem = ulList.querySelector(`[data-id="${userId}"]`);
+        listItem.textContent = `${userDetails.Name} - ${userDetails.mail} - ${userDetails.phnum} - ${userDetails.date} - ${userDetails.time}`;
+      }
+
+      function populateForm(userDetails) {
+        document.getElementById("name").value = userDetails.Name;
+        document.getElementById("mail").value = userDetails.mail;
+        document.getElementById("phno").value = userDetails.phnum;
+        document.getElementById("date").value = userDetails.date;
+        document.getElementById("time").value = userDetails.time;
+        localStorage.setItem("userDetails.eMail", JSON.stringify(userDetails));
+      }
+
+      function resetForm() {
+        document.getElementById("myForm").reset();
+        localStorage.removeItem("userDetails.eMail");
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        axios
+          .get(
+            "https://crudcrud.com/api/01b168edb7e64469bee20a9f2dd90fd6/appointment"
+          )
+          .then((res) => {
+            console.log(res);
+            for (var i = 0; i < res.data.length; i++) {
+              saveOnScreen(res.data[i]);
+            }
+          })
+          .catch((err) => console.log(err));
+      });
     </script>
   </body>
 </html>
