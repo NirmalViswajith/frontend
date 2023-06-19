@@ -6,7 +6,6 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
       #stockForm {
         border: 1px solid #ccc;
@@ -76,6 +75,12 @@
     <script>
       var items = [];
 
+      function clearForm() {
+        document.getElementById("stockForm").reset();
+        localStorage.removeItem("candy");
+        localStorage.removeItem("description");
+        localStorage.removeItem("amount");
+      }
       async function addItem() {
         var candy = document.getElementById("candyInput").value;
         var description = document.getElementById("descriptionInput").value;
@@ -90,7 +95,7 @@
 
         try {
           const response = await axios.post(
-            "https://crudcrud.com/api/5f7623a4f3c04011a077f2498d696699/availableItem",
+            "https://crudcrud.com/api/9095c2a130f3430485010c307ecea743/availableItem",
             item
           );
           console.log("Item added:", response.data);
@@ -101,10 +106,7 @@
             items.push(updatedItem);
           }
 
-          document.getElementById("candyInput").value = "";
-          document.getElementById("descriptionInput").value = "";
-          document.getElementById("amountInput").value = "";
-          document.getElementById("quantityInput").value = "";
+          clearForm(); // Clear the form input fields
 
           // Display the entered items
           displayItems();
@@ -116,7 +118,7 @@
       async function fetchItemFromCloud(itemId) {
         try {
           const response = await axios.get(
-            `https://crudcrud.com/api/5f7623a4f3c04011a077f2498d696699/availableItem/${itemId}`
+            `https://crudcrud.com/api/9095c2a130f3430485010c307ecea743/availableItem/${itemId}`
           );
           return response.data;
         } catch (error) {
@@ -212,20 +214,24 @@
       async function removeItemFromCloud(itemId) {
         try {
           const response = await axios.delete(
-            `https://crudcrud.com/api/5f7623a4f3c04011a077f2498d696699/availableItem/${itemId}`
+            `https://crudcrud.com/api/9095c2a130f3430485010c307ecea743/availableItem/${itemId}`
           );
           console.log("Item removed:", response.data);
         } catch (error) {
           console.error("Error removing item:", error);
         }
       }
+
       async function updateItemInCloud(item) {
         try {
           const obj = {
+            candy: item.candy,
+            description: item.description,
+            amount: item.amount,
             quantity: item.quantity,
           };
-          await axios.patch(
-            `https://crudcrud.com/api/5f7623a4f3c04011a077f2498d696699/availableItem/${item._id}`,
+          await axios.put(
+            `https://crudcrud.com/api/9095c2a130f3430485010c307ecea743/availableItem/${item._id}`,
             obj
           );
           console.log("Item updated");
@@ -233,10 +239,11 @@
           console.error(error);
         }
       }
+
       async function fetchItems() {
         try {
           const response = await axios.get(
-            "https://crudcrud.com/api/5f7623a4f3c04011a077f2498d696699/availableItem"
+            "https://crudcrud.com/api/9095c2a130f3430485010c307ecea743/availableItem"
           );
           items = response.data;
           displayItems();
@@ -246,6 +253,27 @@
       }
 
       window.addEventListener("DOMContentLoaded", fetchItems);
+
+      function saveFormData() {
+        var candy = document.getElementById("candyInput").value;
+        var description = document.getElementById("descriptionInput").value;
+        var amount = document.getElementById("amountInput").value;
+        localStorage.setItem("candy", candy);
+        localStorage.setItem("description", description);
+        localStorage.setItem("amount", amount);
+      }
+      window.addEventListener("DOMContentLoaded", fetchItems);
+
+      // Call the saveFormData function whenever the form inputs change
+      document
+        .getElementById("candyInput")
+        .addEventListener("input", saveFormData);
+      document
+        .getElementById("descriptionInput")
+        .addEventListener("input", saveFormData);
+      document
+        .getElementById("amountInput")
+        .addEventListener("input", saveFormData);
     </script>
   </body>
 </html>
