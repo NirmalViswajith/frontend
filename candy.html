@@ -194,20 +194,20 @@
       }
 
       async function decreaseQuantity(itemIndex, decreaseBy) {
-  var quantity = parseInt(items[itemIndex].quantity);
-  var newQuantity = quantity - decreaseBy;
-  if (newQuantity < 0) {
-    newQuantity = 0;
-  }
-  items[itemIndex].quantity = newQuantity.toString();
-  if (newQuantity === 0) {
-    await removeItemFromCloud(items[itemIndex]._id);
-    items.splice(itemIndex, 1);
-  } else {
-    await updateItemInCloud(items[itemIndex]);
-  }
-  displayItems(); // Add this line to update the displayed items
-}
+        var quantity = parseInt(items[itemIndex].quantity);
+        var newQuantity = quantity - decreaseBy;
+        if (newQuantity < 0) {
+          newQuantity = 0;
+        }
+        items[itemIndex].quantity = newQuantity.toString();
+        if (newQuantity === 0) {
+          await removeItemFromCloud(items[itemIndex]._id);
+          items.splice(itemIndex, 1);
+        } else {
+          await updateItemInCloud(items[itemIndex]);
+        }
+        displayItems(); // Add this line to update the displayed items
+      }
 
       async function removeItemFromCloud(itemId) {
         try {
@@ -220,19 +220,19 @@
         }
       }
       async function updateItemInCloud(item) {
-  try {
-    const obj = {
-      quantity: item.quantity
-    };
-    await axios.patch(
-      `https://crudcrud.com/api/5f7623a4f3c04011a077f2498d696699/availableItem/${item._id}`,
-      obj
-    );
-    console.log("Item updated");
-  } catch (error) {
-    console.error(error);
-  }
-}
+        try {
+          const obj = {
+            quantity: item.quantity,
+          };
+          await axios.patch(
+            `https://crudcrud.com/api/5f7623a4f3c04011a077f2498d696699/availableItem/${item._id}`,
+            obj
+          );
+          console.log("Item updated");
+        } catch (error) {
+          console.error(error);
+        }
+      }
       async function fetchItems() {
         try {
           const response = await axios.get(
