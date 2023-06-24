@@ -27,45 +27,21 @@
       <form id="stockForm" class="mb-8">
         <div class="mb-4">
           <label for="candyInput" class="font-bold">Candy:</label>
-          <input
-            type="text"
-            id="candyInput"
-            class="w-full bg-white rounded px-4 py-2"
-            required
-          />
+          <input type="text" id="candyInput" class="w-full bg-white rounded px-4 py-2" required/>
         </div>
         <div class="mb-4">
           <label for="descriptionInput" class="font-bold">Description:</label>
-          <input
-            type="text"
-            id="descriptionInput"
-            class="w-full bg-white rounded px-4 py-2"
-            required
-          />
+          <input type="text" id="descriptionInput" class="w-full bg-white rounded px-4 py-2" required/>
         </div>
         <div class="mb-4">
           <label for="amountInput" class="font-bold">Amount:</label>
-          <input
-            type="number"
-            id="amountInput"
-            class="w-full bg-white rounded px-4 py-2"
-            required
-          />
+          <input type="number" id="amountInput" class="w-full bg-white rounded px-4 py-2" required/>
         </div>
         <div class="mb-4">
           <label for="quantityInput" class="font-bold">Quantity:</label>
-          <input
-            type="number"
-            id="quantityInput"
-            class="w-full bg-white rounded px-4 py-2"
-            required
-          />
+          <input type="number" id="quantityInput" class="w-full bg-white rounded px-4 py-2" required/>
         </div>
-        <button
-          type="button"
-          onclick="addItem()"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
+        <button type="button" onclick="addItem()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Add Item
         </button>
       </form>
@@ -95,20 +71,16 @@
 
         try {
           const response = await axios.post(
-            "https://crudcrud.com/api/9095c2a130f3430485010c307ecea743/availableItem",
+            "https://crudcrud.com/api/f171d97e97bf48d59331382e5fdf9743/availableItem",
             item
           );
           console.log("Item added:", response.data);
 
-          // Fetch the updated item from the server
           const updatedItem = await fetchItemFromCloud(response.data._id);
           if (updatedItem) {
             items.push(updatedItem);
           }
-
-          clearForm(); // Clear the form input fields
-
-          // Display the entered items
+          clearForm(); 
           displayItems();
         } catch (error) {
           console.error("Error adding item:", error);
@@ -117,9 +89,7 @@
 
       async function fetchItemFromCloud(itemId) {
         try {
-          const response = await axios.get(
-            `https://crudcrud.com/api/9095c2a130f3430485010c307ecea743/availableItem/${itemId}`
-          );
+          const response = await axios.get(`https://crudcrud.com/api/f171d97e97bf48d59331382e5fdf9743/availableItem/${itemId}`);
           return response.data;
         } catch (error) {
           console.error("Error fetching item:", error);
@@ -136,57 +106,23 @@
           itemDiv.classList.add("mb-4");
 
           var itemText = document.createElement("span");
-          itemText.innerText =
-            items[i].candy +
-            " - " +
-            items[i].description +
-            " - " +
-            items[i].amount +
-            " - " +
-            items[i].quantity;
+          itemText.innerText = items[i].candy + " - " + items[i].description + " - " + items[i].amount + " - " +        items[i].quantity;
           itemDiv.appendChild(itemText);
 
           var button1 = document.createElement("button");
-          button1.classList.add(
-            "bg-blue-500",
-            "hover:bg-blue-700",
-            "text-white",
-            "font-bold",
-            "py-2",
-            "px-4",
-            "rounded",
-            "ml-2"
-          );
+          button1.classList.add("bg-blue-500","hover:bg-blue-700","text-white","font-bold","py-2","px-4","rounded","ml-2");
           button1.innerText = "1";
           button1.addEventListener("click", decreaseQuantity.bind(null, i, 1));
           itemDiv.appendChild(button1);
 
           var button2 = document.createElement("button");
-          button2.classList.add(
-            "bg-blue-500",
-            "hover:bg-blue-700",
-            "text-white",
-            "font-bold",
-            "py-2",
-            "px-4",
-            "rounded",
-            "ml-2"
-          );
+          button2.classList.add("bg-blue-500","hover:bg-blue-700","text-white","font-bold","py-2","px-4","rounded","ml-2");
           button2.innerText = "2";
           button2.addEventListener("click", decreaseQuantity.bind(null, i, 2));
           itemDiv.appendChild(button2);
 
           var button3 = document.createElement("button");
-          button3.classList.add(
-            "bg-blue-500",
-            "hover:bg-blue-700",
-            "text-white",
-            "font-bold",
-            "py-2",
-            "px-4",
-            "rounded",
-            "ml-2"
-          );
+          button3.classList.add("bg-blue-500","hover:bg-blue-700","text-white","font-bold","py-2","px-4","rounded","ml-2");
           button3.innerText = "3";
           button3.addEventListener("click", decreaseQuantity.bind(null, i, 3));
           itemDiv.appendChild(button3);
@@ -208,14 +144,12 @@
         } else {
           await updateItemInCloud(items[itemIndex]);
         }
-        displayItems(); // Add this line to update the displayed items
+        displayItems(); 
       }
 
       async function removeItemFromCloud(itemId) {
         try {
-          const response = await axios.delete(
-            `https://crudcrud.com/api/9095c2a130f3430485010c307ecea743/availableItem/${itemId}`
-          );
+          const response = await axios.delete(`https://crudcrud.com/api/f171d97e97bf48d59331382e5fdf9743/availableItem/${itemId}`);
           console.log("Item removed:", response.data);
         } catch (error) {
           console.error("Error removing item:", error);
@@ -230,10 +164,7 @@
             amount: item.amount,
             quantity: item.quantity,
           };
-          await axios.put(
-            `https://crudcrud.com/api/9095c2a130f3430485010c307ecea743/availableItem/${item._id}`,
-            obj
-          );
+          await axios.put(`https://crudcrud.com/api/f171d97e97bf48d59331382e5fdf9743/availableItem/${item._id}`,obj);
           console.log("Item updated");
         } catch (error) {
           console.error(error);
@@ -242,9 +173,7 @@
 
       async function fetchItems() {
         try {
-          const response = await axios.get(
-            "https://crudcrud.com/api/9095c2a130f3430485010c307ecea743/availableItem"
-          );
+          const response = await axios.get("https://crudcrud.com/api/f171d97e97bf48d59331382e5fdf9743/availableItem");
           items = response.data;
           displayItems();
         } catch (error) {
@@ -264,16 +193,9 @@
       }
       window.addEventListener("DOMContentLoaded", fetchItems);
 
-      // Call the saveFormData function whenever the form inputs change
-      document
-        .getElementById("candyInput")
-        .addEventListener("input", saveFormData);
-      document
-        .getElementById("descriptionInput")
-        .addEventListener("input", saveFormData);
-      document
-        .getElementById("amountInput")
-        .addEventListener("input", saveFormData);
+      document.getElementById("candyInput").addEventListener("input", saveFormData);
+      document.getElementById("descriptionInput").addEventListener("input", saveFormData);
+      document.getElementById("amountInput").addEventListener("input", saveFormData);
     </script>
   </body>
 </html>
