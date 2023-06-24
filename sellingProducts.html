@@ -1,171 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <div>
-    <form id="productForm" action="">
-      <label for="productName">Product Name:</label>
-      <input type="text" name="productName" id="productName">
-      <label for="sellingPrice">Selling Price:</label>
-      <input type="number" name="sellingPrice" id="sellingPrice">
-      <label for="items">Choose a category: </label>
-      <select name="items" id="items">
-        <option value="ElectronicItems">Electronic Items</option>
-        <option value="FoodItems">Food Items</option>
-        <option value="SkincareItems">Skincare Items</option>
-      </select>
-      <input type="button" id="addProduct" value="Add Product">
-    </form>
-  </div>
-  <hr>
-  <div>
-    <h3>Electronic Items</h3>
-    <ul id="electronicItems"></ul>
-    <h3>Food Items</h3>
-    <ul id="foodItems"></ul>
-    <h3>Skincare Items</h3>
-    <ul id="skincareItems"></ul>
-  </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <form id="productForm">
+        <label for="productName">Product Name:</label>
+        <input type="text" name="productName" id="productName" />
+        <label for="sellingPrice">Selling Price:</label>
+        <input type="number" name="sellingPrice" id="sellingPrice" />
+        <label for="items">Choose a category: </label>
+        <select name="items" id="items">
+          <option value="ElectronicItems">Electronic Items</option>
+          <option value="FoodItems">Food Items</option>
+          <option value="SkincareItems">Skincare Items</option>
+        </select>
+        <input type="button" id="addProduct" value="Add Product" />
+      </form>
+    </div>
+    <hr />
+    <div>
+      <h3>Electronic Items</h3>
+      <ul id="electronicItems"></ul>
+      <h3>Food Items</h3>
+      <ul id="foodItems"></ul>
+      <h3>Skincare Items</h3>
+      <ul id="skincareItems"></ul>
+    </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script>
-    // Function to fetch products from the API and display them on the screen
-    function fetchProducts() {
-      // Send a GET request to the API to retrieve the products
-      axios.get("https://crudcrud.com/api/f171d97e97bf48d59331382e5fdf9743/products")
-        .then(function(response) {
-          var products = response.data;
-  
-          // Loop through the products and create list items for each category
-          for (var i = 0; i < products.length; i++) {
-            var product = products[i];
-  
-            // Create a new list item element
-            var listItem = document.createElement('li');
-            listItem.textContent = product.productName + ' - $' + product.sellingPrice;
-  
-            // Create a delete button for the list item
-            var deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Delete';
-            deleteButton.addEventListener('click', function(productToDelete) {
-              return function() {
-                var productId = productToDelete._id; // Get the product ID
-  
-                // Send the DELETE request to the API to delete the product
-                axios.delete("https://crudcrud.com/api/f171d97e97bf48d59331382e5fdf9743/products/" + productId)
-                  .then(function(response) {
-                    console.log('Product deleted:', response.data);
-                    listItem.remove(); // Remove the list item from the screen
-                  })
-                  .catch(function(error) {
-                    console.error('Error deleting product:', error);
-                  });
-              };
-            }(product));
-  
-            // Append the delete button to the list item
-            listItem.appendChild(deleteButton);
-  
-            // Append the new list item to the corresponding category list
-            switch (product.category) {
-              case 'ElectronicItems':
-                document.getElementById('electronicItems').appendChild(listItem);
-                break;
-              case 'FoodItems':
-                document.getElementById('foodItems').appendChild(listItem);
-                break;
-              case 'SkincareItems':
-                document.getElementById('skincareItems').appendChild(listItem);
-                break;
-              default:
-                break;
-            }
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      async function fetchProducts() {
+        try {
+          const response = await axios.get(
+            "https://crudcrud.com/api/f171d97e97bf48d59331382e5fdf9743/products"
+          );
+          const products = response.data;
+          const categoryLists = {
+            ElectronicItems: document.getElementById("electronicItems"),
+            FoodItems: document.getElementById("foodItems"),
+            SkincareItems: document.getElementById("skincareItems"),
+          };
+          for (const product of products) {
+            const listItem = createListItem(product);
+            categoryLists[product.category].appendChild(listItem);
           }
-        })
-        .catch(function(error) {
-          console.error('Error fetching products:', error);
-        });
-    }
-  
-    // Add an event listener to fetch products when the page is loaded
-    window.addEventListener('load', function() {
-      fetchProducts();
-    });
-  
-    document.getElementById('addProduct').addEventListener('click', function(event) {
-      event.preventDefault(); // Prevent form submission
-  
-      // Get the selected category and product details
-      var category = document.getElementById('items').value;
-      var productName = document.getElementById('productName').value;
-      var sellingPrice = document.getElementById('sellingPrice').value;
-  
-      // Create a new list item element
-      var listItem = document.createElement('li');
-      listItem.textContent = productName + ' - $' + sellingPrice;
-  
-      // Create a delete button for the list item
-      var deleteButton = document.createElement('button');
-      deleteButton.textContent = 'Delete';
-      deleteButton.addEventListener('click', function(productToAdd) {
-        return function() {
-          var productId = productToAdd._id; // Get the product ID
-  
-          // Send the DELETE request to the API to delete the product
-          axios.delete("https://crudcrud.com/api/f171d97e97bf48d59331382e5fdf9743/products/" + productId)
-            .then(function(response) {
-              console.log('Product deleted:', response.data);
-              listItem.remove(); // Remove the list item from the screen
-            })
-            .catch(function(error) {
-              console.error('Error deleting product:', error);
-            });
-        };
-      }(product));
-  
-      // Append the delete button to the list item
-      listItem.appendChild(deleteButton);
-  
-      // Append the new list item to the corresponding category list
-      switch (category) {
-        case 'ElectronicItems':
-          document.getElementById('electronicItems').appendChild(listItem);
-          break;
-        case 'FoodItems':
-          document.getElementById('foodItems').appendChild(listItem);
-          break;
-        case 'SkincareItems':
-          document.getElementById('skincareItems').appendChild(listItem);
-          break;
-        default:
-          break;
+        } catch (error) {
+          console.error("Error fetching products:", error);
+        }
       }
-  
-      // Create the product object
-      var product = {
-        category: category,
-        productName: productName,
-        sellingPrice: sellingPrice
-      };
-  
-      // Send the POST request to the API to add the product
-      axios.post("https://crudcrud.com/api/f171d97e97bf48d59331382e5fdf9743/products", product)
-        .then(function(response) {
-          console.log('Product added:', response.data);
-        })
-        .catch(function(error) {
-          console.error('Error adding product:', error);
+      function createListItem(product) {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${product.productName} - $${product.sellingPrice}`;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.addEventListener("click", async () => {
+          try {
+            await deleteProduct(product._id);
+            listItem.remove(); // Remove the list item from the screen
+            console.log("Product deleted:", product._id);
+          } catch (error) {
+            console.error("Error deleting product:", error);
+          }
         });
-  
-      // Clear the input fields after adding the product
-      document.getElementById('productName').value = '';
-      document.getElementById('sellingPrice').value = '';
-    });
-  </script>
-  
-</body>
+
+        listItem.appendChild(deleteButton);
+        return listItem;
+      }
+      async function deleteProduct(productId) {
+        await axios.delete(
+          `https://crudcrud.com/api/f171d97e97bf48d59331382e5fdf9743/products/${productId}`
+        );
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        fetchProducts();
+      });
+
+      document
+        .getElementById("addProduct")
+        .addEventListener("click", async (event) => {
+          event.preventDefault(); // Prevent form submission
+          const category = document.getElementById("items").value;
+          const productName = document.getElementById("productName").value;
+          const sellingPrice = document.getElementById("sellingPrice").value;
+          const product = {
+            category: category,
+            productName: productName,
+            sellingPrice: sellingPrice,
+          };
+          try {
+            await axios.post(
+              "https://crudcrud.com/api/f171d97e97bf48d59331382e5fdf9743/products",
+              product
+            );
+            console.log("Product added:", product);
+            const listItem = createListItem(product);
+            const categoryList = document.getElementById(
+              `${category.toLowerCase()}Items`
+            );
+            categoryList.appendChild(listItem);
+            document.getElementById("productName").value = "";
+            document.getElementById("sellingPrice").value = "";
+          } catch (error) {
+            console.error("Error adding product:", error);
+          }
+        });
+    </script>
+  </body>
 </html>
