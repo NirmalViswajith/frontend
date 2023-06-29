@@ -18,7 +18,7 @@
           <option value="FoodItems">Food Items</option>
           <option value="SkincareItems">Skincare Items</option>
         </select>
-        <button type="button" id="button" onclick="addproducts()">
+        <button type="button" id="button" onclick="addProducts()">
           Add Products
         </button>
       </form>
@@ -35,26 +35,27 @@
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-      async function addproducts() {
+      async function addProducts() {
         const productName = document.getElementById("productName").value;
         const sellingPrice = document.getElementById("sellingPrice").value;
         const category = document.getElementById("items").value;
-        const products = {
+        const product = {
           productName,
           sellingPrice,
           category,
         };
         try {
-          await axios.post(
-            "https://crudcrud.com/api/3ef1ec6f4c8346e4a4d613482634a58c/productList",
-            products
+          const response = await axios.post(
+            "https://crudcrud.com/api/8361b9e0e0b443d08a63a633c864e6e0/productList",
+            product
           );
-          if (products.category == "ElectronicItems") {
-            addlistElectronic(products);
-          } else if (products.category == "FoodItems") {
-            addlistFood(products);
+          const createdProduct = response.data;
+          if (product.category === "ElectronicItems") {
+            addListElectronic(createdProduct);
+          } else if (product.category === "FoodItems") {
+            addListFood(createdProduct);
           } else {
-            addlistSkin(products);
+            addListSkin(createdProduct);
           }
           document.getElementById("productName").value = "";
           document.getElementById("sellingPrice").value = "";
@@ -62,35 +63,42 @@
           console.log(error);
         }
       }
-      function addlistElectronic(products) {
+
+      function addListElectronic(product) {
         const parentList = document.getElementById("electronicItems");
         const listItems = document.createElement("li");
-        listItems.innerText = `${products.productName} - ${products.sellingPrice} - ${products.category}`;
+        listItems.innerText = `${product.productName} - ${product.sellingPrice} - ${product.category}`;
         const delButton = document.createElement("button");
         delButton.innerText = "Delete";
-        delButton.addEventListener("click", deleteProduct(products._id, listItems));
+        delButton.addEventListener("click", () =>
+          deleteProduct(product._id, listItems)
+        );
         listItems.appendChild(delButton);
         parentList.appendChild(listItems);
       }
 
-      function addlistFood(products) {
+      function addListFood(product) {
         const parentList = document.getElementById("foodItems");
         const listItems = document.createElement("li");
-        listItems.innerText = `${products.productName} - ${products.sellingPrice} - ${products.category}`;
+        listItems.innerText = `${product.productName} - ${product.sellingPrice} - ${product.category}`;
         const delButton = document.createElement("button");
         delButton.innerText = "Delete";
-        delButton.addEventListener("click", deleteProduct(products._id, listItems));
+        delButton.addEventListener("click", () =>
+          deleteProduct(product._id, listItems)
+        );
         listItems.appendChild(delButton);
         parentList.appendChild(listItems);
       }
 
-      function addlistSkin(products) {
+      function addListSkin(product) {
         const parentList = document.getElementById("skincareItems");
         const listItems = document.createElement("li");
-        listItems.innerText = `${products.productName} - ${products.sellingPrice} - ${products.category}`;
+        listItems.innerText = `${product.productName} - ${product.sellingPrice} - ${product.category}`;
         const delButton = document.createElement("button");
         delButton.innerText = "Delete";
-        delButton.addEventListener("click", deleteProduct(products._id, listItems));
+        delButton.addEventListener("click", () =>
+          deleteProduct(product._id, listItems)
+        );
         listItems.appendChild(delButton);
         parentList.appendChild(listItems);
       }
@@ -98,16 +106,16 @@
       async function fetchItems() {
         try {
           const response = await axios.get(
-            "https://crudcrud.com/api/3ef1ec6f4c8346e4a4d613482634a58c/productList"
+            "https://crudcrud.com/api/8361b9e0e0b443d08a63a633c864e6e0/productList"
           );
           const products = response.data;
           products.forEach((product) => {
             if (product.category === "ElectronicItems") {
-              addlistElectronic(product);
+              addListElectronic(product);
             } else if (product.category === "FoodItems") {
-              addlistFood(product);
+              addListFood(product);
             } else {
-              addlistSkin(product);
+              addListSkin(product);
             }
           });
         } catch (error) {
@@ -115,20 +123,19 @@
         }
       }
 
-      function deleteProduct(productId, listItem) {
-        return async function () {
-          try {
-            await axios.delete(
-              `https://crudcrud.com/api/3ef1ec6f4c8346e4a4d613482634a58c/productList/${productId}`
-            );
-            listItem.remove();
-          } catch (error) {
-            console.log(error);
-          }
-        };
+      async function deleteProduct(productId, listItem) {
+        try {
+          await axios.delete(
+            `https://crudcrud.com/api/8361b9e0e0b443d08a63a633c864e6e0/productList/${productId}`
+          );
+          listItem.remove();
+        } catch (error) {
+          console.log(error);
+        }
       }
-      window.addEventListener("DOMContentLoaded", async () => {
-        await fetchItems();
+
+      window.addEventListener("DOMContentLoaded", () => {
+        fetchItems();
       });
     </script>
   </body>
